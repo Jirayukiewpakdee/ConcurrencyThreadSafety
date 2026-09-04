@@ -19,7 +19,7 @@ public class Bank {
      * @return true ถ้าโอนสำเร็จ, false ถ้าเงินต้นทางไม่พอ
      * @throws IllegalArgumentException ถ้า argument ไม่ถูกต้อง หรือโอนเข้าบัญชีตัวเอง
      */
-    public static boolean transfer(Account from, Account to, int amount) {
+    public static synchronized boolean transfer(Account from, Account to, int amount) {
         if (from == null || to == null) {
             throw new IllegalArgumentException("accounts must not be null");
         }
@@ -45,8 +45,16 @@ public class Bank {
         //
         // ห้ามแก้ด้วยการเอาล็อกใบใดใบหนึ่งออก — ยอดรวมจะเพี้ยน
         // ---------------------------------------------------------------
+        Account first = from;
+        Account second = to;
+        if(from.id()>second.id()){
+            first = to;
+            second = from;
+        }
+        
         synchronized (from) {
             synchronized (to) {
+                
                 if (!from.withdraw(amount)) {
                     return false;
                 }

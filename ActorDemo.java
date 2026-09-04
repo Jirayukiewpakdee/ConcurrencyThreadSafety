@@ -40,9 +40,7 @@ public class ActorDemo {
 
         private int balance = 0;
 
-        private final BlockingQueue<Msg> inbox = new LinkedBlockingQueue<Msg>();
-
-        /** คนอื่นทำได้แค่นี้ — ฝากข้อความไว้ แล้วจากไป */
+        private final BlockingQueue<Msg> inbox = new LinkedBlockingQueue<Msg>(); //***Queue very important***
         void send(Msg m) throws InterruptedException {
             inbox.put(m);
         }
